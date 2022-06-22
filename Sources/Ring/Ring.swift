@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum CenterType {
+public enum CenterType {
     case percentage
     case remaining
     case percentageRemaining
@@ -17,6 +17,14 @@ enum CenterType {
 @available(macOS 10.15, *)
 @available(iOS 15, *)
 public struct RingProgressView: View {
+    
+    public init(totalValue: Int, mainColor: Binding<Color>, secondaryColor: Binding<Color>, centerType: CenterType,completion: @escaping (Bool) -> () ) {
+        self.totalValue = totalValue
+        self._progressFrontColor = mainColor
+        self._progressBackColor = secondaryColor
+        self.centerType = centerType
+        self.completion = completion
+    }
     var totalValue: Int
     @Binding var progressFrontColor: Color
     @Binding var progressBackColor: Color
