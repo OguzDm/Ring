@@ -40,7 +40,7 @@ public struct RingProgressView: View {
 }
 
 @available(macOS 10.15, *)
-struct CircularView: View {
+public struct CircularView: View {
     @State var value = 0
     var totalValue: Int
     @Binding var progressFrontColor: Color
@@ -49,7 +49,7 @@ struct CircularView: View {
     var changer: Date
     var completion: (Bool) -> ()
     
-    var body: some View {
+    public var body: some View {
         if #available(macOS 11.0, *) {
             ZStack {
                 Circle()
