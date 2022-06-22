@@ -7,16 +7,37 @@ public enum CenterType {
     case nothing
 }
 
+public enum RingSize{
+    case small
+    case medium
+    case large
+    case custom(height: CGFloat)
+    
+    var height:CGFloat {
+        switch self {
+        case .small:
+            return 250
+        case .medium:
+            return 350
+        case .large:
+            return 450
+        case .custom(let height):
+            return height
+        }
+    }
+}
+
 @available(macOS 10.15, *)
 @available(iOS 15, *)
 public struct RingProgressView: View {
     
-    public init(totalValue: Int, mainColor: Binding<Color>, secondaryColor: Binding<Color>, centerType: CenterType, isButtonActive: Bool = false,completion: @escaping (Bool) -> () ) {
+    public init(totalValue: Int, mainColor: Binding<Color>, secondaryColor: Binding<Color>, centerType: CenterType, isButtonActive: Bool = false,size: RingSize, completion: @escaping (Bool) -> () ) {
         self.totalValue = totalValue
         self._progressFrontColor = mainColor
         self._progressBackColor = secondaryColor
         self.centerType = centerType
         self.isButtonActive = isButtonActive
+        self.size = size
         self.completion = completion
     }
     var totalValue: Int
@@ -24,13 +45,14 @@ public struct RingProgressView: View {
     @Binding var progressBackColor: Color
     var isButtonActive: Bool
     var centerType: CenterType
+    var size: RingSize
     var completion: (Bool) -> ()
     public var body: some View {
         if #available(macOS 12, *) {
             TimelineView(.periodic(from: .now, by: 1)) { context in
                 CircularView(totalValue: totalValue,
                              progressFrontColor: $progressFrontColor,
-                             progressBackColor: $progressBackColor,centerType: centerType,
+                             progressBackColor: $progressBackColor,centerType: centerType,size: size,
                              changer: context.date,isButtonActives: isButtonActive) { completed in
                     completion(completed)
                 }
@@ -50,6 +72,7 @@ public struct CircularView: View {
     @Binding var progressFrontColor: Color
     @Binding var progressBackColor: Color
     var centerType: CenterType
+    var size: RingSize
     var changer: Date
     var isButtonActives: Bool
     var completion: (Bool) -> ()
@@ -83,6 +106,7 @@ public struct CircularView: View {
                         
                     }
                 }
+                .frame(height: size.height)
                 
                 if isButtonActives {
                     HStack {
@@ -103,8 +127,6 @@ public struct CircularView: View {
                             .frame(width:80,height: 80)
                         }
                     }
-                    
-                    Spacer()
                 }
                
             }
@@ -150,5 +172,9 @@ public struct CircularView: View {
         
     }
 }
-
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
 
