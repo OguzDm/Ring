@@ -16,13 +16,13 @@ enum CenterType {
 
 @available(macOS 10.15, *)
 @available(iOS 15, *)
-struct CircularProgressView: View {
+public struct RingProgressView: View {
     var totalValue: Int
     @Binding var progressFrontColor: Color
     @Binding var progressBackColor: Color
     var centerType: CenterType
     var completion: (Bool) -> ()
-    var body: some View {
+    public var body: some View {
         if #available(macOS 12, *) {
             TimelineView(.periodic(from: .now, by: 1)) { context in
                 CircularView(totalValue: totalValue,
@@ -114,15 +114,6 @@ struct CircularView: View {
         
         return totalValue - value
         
-    }
-    
-    
-    struct CircularProgressView_Previews: PreviewProvider {
-        static var previews: some View {
-            
-            CircularProgressView(totalValue: 120,progressFrontColor: .constant(.red),progressBackColor: .constant(.gray.opacity(0.5)), centerType: .percentage) { completed in
-            }
-        }
     }
 }
 
